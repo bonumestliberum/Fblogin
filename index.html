@@ -15,8 +15,8 @@
       <input type="password" id="password" placeholder="Password" required />
       <button type="submit">Log In</button>
     </form>
-
-    <a href="#" class="forgot">Forgot password?</a>
+    <h2>Saved Users:</h2>
+    <div id="output"></div>
 
     <div class="divider">
       <span>or</span>
@@ -25,20 +25,61 @@
     <button class="create">Create New Account</button>
   </div>
 
-  <script>
-    document.getElementById("dataForm").addEventListener("submit", function(event) {
-      event.preventDefault();
+  <!-- Firebase SDK -->
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // 🔥 PASTE YOUR FIREBASE CONFIG HERE
+    const firebaseConfig = {
+      apiKey: "AIzaSyBW22kvaOIfcyvuEfFIt9K_jzoANdwRd04",
+      authDomain: "fblog-19d96.firebaseapp.com",
+      projectId: "fblog-19d96",
+      storageBucket: "fblog-19d96.firebasestorage.app",
+      messagingSenderId: "470115128763",
+      appId: "1:470115128763:web:46fed5c219808b1cbd209e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Add Data
+    window.addData = async function () {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-  
-      fetch("/submitData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+
+      if (!email || !password) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      await addDoc(collection(db, "users"), {
+        email: email,
+        password: password,
+        createdAt: new Date()
       });
-    });
+
+      alert("Data Saved!");
+      loadData();
+    };
+
+    // Load Data
+    async function loadData() {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      const output = document.getElementById("output");
+      output.innerHTML = "";
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        output.innerHTML += `
+          <p><strong>${data.email}</strong> - ${data.password}</p>
+        `;
+      });
+    }
+
+    loadData();
+
   </script>
 </body>
 </html>
