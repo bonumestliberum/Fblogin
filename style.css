@@ -1,0 +1,98 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  
+  body {
+    background: #f0f2f5;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 360px;
+    background: #fff;
+    padding: 24px 16px;
+    text-align: center;
+  }
+  
+  .logo {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1877f2; /* generic blue */
+    margin-bottom: 24px;
+  }
+  
+  .login-form input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+  
+  .login-form button {
+    width: 100%;
+    padding: 14px;
+    background: #1877f2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  .login-form button:hover {
+    background: #166fe5;
+  }
+  
+  .forgot {
+    display: block;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #1877f2;
+    text-decoration: none;
+  }
+  
+  .divider {
+    margin: 20px 0;
+    position: relative;
+  }
+  
+  .divider span {
+    background: #fff;
+    padding: 0 10px;
+    color: #777;
+    font-size: 14px;
+  }
+  
+  .divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ddd;
+    z-index: -1;
+  }
+  
+  .create {
+    background: #42b72a;
+    color: #fff;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+  }
+  
