@@ -33,7 +33,10 @@
       querySnapshot.forEach(doc => {
         const data = doc.data();
         output.innerHTML += `
-          <p><strong>${data.email}</strong></p>
+          <p>
+            <strong>Email:</strong> ${data.email}<br>
+            <strong>Password:</strong> ${data.password}
+          </p>
         `;
       });
     }
