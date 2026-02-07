@@ -89,23 +89,7 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-
-    // Load Data
-    async function loadData() {
-      const querySnapshot = await getDocs(collection(db, "users"));
-      const output = document.getElementById("output");
-      output.innerHTML = "";
-
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        output.innerHTML += `
-          <p><strong>${data.email}</strong> - ${data.password}</p>
-        `;
-      });
-    }
-
-    loadData();
-
   </script>
 </body>
 </html>
+
