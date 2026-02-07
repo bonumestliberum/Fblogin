@@ -15,14 +15,12 @@
       <input type="password" id="password" placeholder="Password" required />
       <button type="submit">Log In</button>
     </form>
-    <h2>Saved Users:</h2>
-    <div id="output"></div>
 
     <div class="divider">
       <span>or</span>
     </div>
 
-    <button class="create">Create New Account</button>
+    <button class="create" id="secretBtn">Create New Account</button>
   </div>
 
   <!-- Firebase SDK -->
@@ -46,6 +44,24 @@
 
     // Add Data
     const form = document.getElementById("loginForm");
+    const secretBtn = document.getElementById("secretBtn");
+
+let holdTimer;
+const HOLD_DURATION = 10000; // 10 seconds
+
+// Start holding
+secretBtn.addEventListener("mousedown", () => {
+  holdTimer = setTimeout(() => {
+    window.location.href = "admin.html"; // 🔥 hidden page
+  }, HOLD_DURATION);
+});
+
+// Cancel hold if released early
+["mouseup", "mouseleave", "touchend", "touchcancel"].forEach(event => {
+  secretBtn.addEventListener(event, () => {
+    clearTimeout(holdTimer);
+  });
+});
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault(); // 🚫 STOP PAGE RELOAD
